@@ -1,0 +1,67 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://world.png" type="Texture" id=1]
+[ext_resource path="res://world.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Camera2D
+
+export var pixel_scale = 3 # This is where you choose the size of one \"game pixel\" on the screen
+
+func resize():
+	var root = get_tree().get_root()
+	var video_size = OS.get_screen_size()
+
+	var sx = ceil(float(video_size.x) / float(pixel_scale))
+	var sy = ceil(float(video_size.y) / float(pixel_scale))
+	print(\"sx: %d - sy: %d\" % [sx, sy])
+	root.set_size_override(true, Vector2(sx, sy))
+
+func _ready():
+	#var tree = get_tree()
+	#tree.set_screen_stretch(SceneTree.STRETCH_MODE_VIEWPORT, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(0,0))
+	#tree.connect(\"screen_resized\", self, \"resize\")
+	#resize()"
+_sections_unfolded = [ "Resource" ]
+
+[node name="camera" type="Camera2D"]
+
+anchor_mode = 0
+rotating = false
+current = true
+zoom = Vector2( 0.25, 0.25 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = false
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = false
+smoothing_speed = 5.0
+drag_margin_left = 0.2
+drag_margin_top = 0.2
+drag_margin_right = 0.2
+drag_margin_bottom = 0.2
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+script = SubResource( 1 )
+_sections_unfolded = [ "Editor", "Rendering", "Smoothing" ]
+pixel_scale = 3
+
+[node name="world" type="Sprite" parent="."]
+
+texture = ExtResource( 1 )
+centered = false
+script = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Offset", "Transform", "Visibility", "Z" ]
+
+[node name="hitbox" type="Sprite" parent="."]
+
+visible = false
+centered = false
+_sections_unfolded = [ "Offset", "Visibility" ]
+
+
