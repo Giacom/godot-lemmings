@@ -7,7 +7,8 @@ var lemming_prefab = load("res://lemming.tscn")
 var lemmings = []
 
 var timer = 0
-var spawn_time = 1500
+var spawn_time = 100
+var max_lemmings = 255
 	
 func set_world(var node):
 	world = node
@@ -29,6 +30,8 @@ func _process(delta):
 	
 	
 func spawn_lemming():
+	if lemmings.size() >= max_lemmings:
+		return
 	var lemming = lemming_prefab.instance()
 	world.add_child(lemming)
 	lemmings.push_back(lemming)

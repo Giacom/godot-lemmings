@@ -12,6 +12,7 @@ config_version=3
 
 config/name="Lemmings"
 run/main_scene="res://world.tscn"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
 
 [autoload]
@@ -28,5 +29,6 @@ singletons=[  ]
 
 [rendering]
 
+quality/2d/use_pixel_snap=true
 quality/filters/anisotropic_filter_level=0.0
 environment/default_environment="res://default_env.tres"

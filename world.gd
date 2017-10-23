@@ -10,6 +10,7 @@ var world_pixels = []
 var world_size
 
 var update_map = false
+var delete_queue = PoolVector2Array()
 
 func _ready():
 	var image = texture.get_data()
@@ -36,11 +37,11 @@ func _process(delta):
 	if update_map:
 		var image = texture.get_data()
 		image.lock()
-		for y in range(world_size.y):
-			for x in range(world_size.x):
-				var pixel = get_data(x, y)
-				if pixel.is_empty:
-					image.set_pixel(x, y, Color(0, 0, 0, 0))
+		while delete_queue.size() > 0:
+			var i = delete_queue.size() - 1
+			var v = delete_queue[i]
+			image.set_pixel(v.x, v.y, Color(0, 0, 0, 0))
+			delete_queue.remove(i)
 		texture.set_data(image)
 		image.unlock()
 		update_map = false
@@ -53,9 +54,7 @@ func _input(var event):
 			destroy_world(Rect2(get_local_mouse_position() - blast, blast * 2))
 	
 func get_data(var x, var y):
-	#return world_pixels[y][x]
-	var index = int((int(y) * int(world_size.x)) + int(x))
-	return world_pixels[index]
+	return world_pixels[(y * world_size.x) + x]
 	
 func is_in_world(var x, var y):
 	return x >= 0 and y >= 0 and x < world_size.x and y < world_size.y
@@ -84,4 +83,5 @@ func destroy_world(var rect):
 		for x in range(round_rect.position.x, round_rect.end.x):
 			if is_in_world(x, y):
 				get_data(x, y).is_empty = true
+				delete_queue.push_back(Vector2(x, y))
 	update_map = true
